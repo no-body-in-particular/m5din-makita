@@ -272,7 +272,7 @@ bool has_health() {
   return rsp[1] == 0x06;
 }
 
-byte overheat() {
+byte overload() {
   byte rsp[16];
   memset(rsp, 0, 4);
   byte cmd_params[] = {0xD4, 0x8D, 0x00, 0x07};
@@ -282,7 +282,7 @@ byte overheat() {
   return (rsp[5] & 0xf0) >> 4 | (rsp[6] & 0x70);
 }
 
-byte overcurrent() {
+byte overdischarge() {
   byte rsp[4];
   memset(rsp, 0, 4);
   byte cmd_params[] = {0xD4, 0xBA, 0x00, 0x01};
@@ -345,13 +345,13 @@ void getMsg() {
   // design capacity in MaH
   uint32_t design_capacity = SWAP_NIBBLES(raw_msg[16]) * 100l;
 
-  uint8_t overheat_percent = raw_msg[25];
-  overheat_percent = SWAP_NIBBLES(overheat_percent);
-  overheat_percent = overheat_percent & 0xE0 ? overheat_percent & 0x1F : 0;
-  overheat_percent *= 5;
+  uint8_t overload_percent = raw_msg[25];
+  overload_percent = SWAP_NIBBLES(overload_percent);
+  overload_percent = overload_percent & 0xE0 ? overload_percent & 0x1F : 0;
+  overload_percent *= 5;
 
-  uint8_t overcurrent_percent = raw_msg[24] & 1 ? (~raw_msg[24]) >> 4 : 0;
-  overcurrent_percent *= 5.33f;
+  uint8_t undervoltage_percent = raw_msg[24] & 1 ? (~raw_msg[24]) >> 4 : 0;
+  undervoltage_percent *= 5.33f;
 
   uint8_t health_percent =
       100 -
@@ -360,8 +360,8 @@ void getMsg() {
   // newer battery with health data
   if (has_health()) {
     health_percent = health();
-    overcurrent_percent = overcurrent();
-    overheat_percent = overheat();
+    undervoltage_percent = overdischarge();
+    overload_percent = overload();
   }
 
   DinMeter.Display.drawString("Charge count: " + String(charge_count), 5, 18);
@@ -369,10 +369,10 @@ void getMsg() {
   DinMeter.Display.drawString("Status byte: " + String(error_byte), 5, 48);
   DinMeter.Display.drawString("DesignCap: " + String(design_capacity) + "MaH",
                               5, 63);
-  DinMeter.Display.drawString("Overheat: " + String(overheat_percent) + "%", 5,
+  DinMeter.Display.drawString("Overdischarge: " + String(overload_percent) + "%", 5,
                               78);
   DinMeter.Display.drawString(
-      "Overcurrent: " + String(overcurrent_percent) + "%", 5, 93);
+      "Overload: " + String(undervoltage_percent) + "%", 5, 93);
   DinMeter.Display.drawString("Health: " + String(health_percent) + "%", 5,
                               108);
 }
@@ -537,9 +537,8 @@ void diagnosis() {
     case 1:
       DinMeter.Display.drawString(" Cell undervoltage.", 5, 18);
       if (model_type == 2)
-        DinMeter.Display.drawString(" -Manually charge cells.", 5, 33);
+        DinMeter.Display.drawString(" -Manually charge", 5, 33);
       DinMeter.Display.drawString(" -Reset battery.", 5, 48);
-
       break;
     case 2:
       DinMeter.Display.drawString(". Cell out of balance.", 5, 18);
