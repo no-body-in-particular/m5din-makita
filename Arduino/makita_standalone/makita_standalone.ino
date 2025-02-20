@@ -513,7 +513,7 @@ void diagnosis() {
   DinMeter.Display.drawString("Failure analysis: ", 5, 5);
 
   if (cause > 0 && error_byte_set && model_type == 2) {
-    DinMeter.Display.drawString(" F0513. Error byte set.", 5, 48);
+    DinMeter.Display.drawString(" F0513. Error reset", 5, 48);
     DinMeter.Display.drawString("   unsupported.", 5, 63);
     return;
   }
