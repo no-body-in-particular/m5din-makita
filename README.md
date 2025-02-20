@@ -10,3 +10,7 @@ Please use the included OneWire library as makita has funny timings.
 As you can also see on the connection pictures, only one set of wires from the m5din meter is used, both data lines hooked up to the 5v power out on that channel of the din meter with a 4k7 pullup resistor. Ground is connected to battery ground - and power for the m5din is pulled from the battery positive.
 
 I've included a custom makita BMS that i used to debug/test the protocol, you can use it as you please.
+
+
+As for the "why makita": their 5ah 18v batteries can take an absolute *ton* of abuse, and outside of 18v 12ah milwaukee batteries - protection mosfets wise their current capacity is really unmatched.
+I like the batteries, and i like being able to repair and maintain my own :)
