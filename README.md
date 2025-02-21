@@ -14,3 +14,9 @@ I've included a custom makita BMS that i used to debug/test the protocol, you ca
 
 As for the "why makita": their 5ah 18v batteries can take an absolute *ton* of abuse, and outside of 18v 12ah milwaukee batteries - protection mosfets wise their current capacity is really unmatched.
 I like the batteries, and i like being able to repair and maintain my own :)
+
+That said, there are chinese PCB clones with roughly the same rDSOn mosfets wise - https://aliexpress.com/item/1005007278381624.html being an example, or the PCBs found here https://aliexpress.com/item/1005007589522529.html .
+If RdsON is no concern, and casing size is a problem https://aliexpress.com/item/1005008036314483.html is a good example of a pcb with undervoltage protection.
+Downside of the later is that the mosfet CAN go into hysteresis when hitting the low voltage cutoff, and this can kill the mosfet.
+Another downside of the above PCBs is that they do consume more current than the original makita PCBs, hence the batteries need charging more often to stay alive.
+Above PCBs are still MUCH better than the older makita PCBs which do not have any of those protections however, and should be preferred for those batteries.
