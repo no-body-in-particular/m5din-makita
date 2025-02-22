@@ -14,11 +14,9 @@
   }
 // for info on this, search "IRAM_ATTR" at
 // https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-guides/general-notes.html
-#define CRIT_TIMING IRAM_ATTR
 #else
 #define wire_noInterrupts() noInterrupts();
 #define wire_interrupts() interrupts();
-#define CRIT_TIMING
 #endif
 
 
@@ -72,7 +70,7 @@ template < int m_pin > class Makita {
         * presence was signaled, otherwise false(0).
         * @return true(1) on reset and presence, otherwise false(0).
         */
-       bool CRIT_TIMING reset() {
+       bool reset() {
          wire_noInterrupts();
 
           DIRECT_MODE_INPUT(baseReg, bitmask); 
@@ -110,7 +108,7 @@ template < int m_pin > class Makita {
        }
  
 
-       uint8_t CRIT_TIMING read(uint8_t bits = 8) {
+       uint8_t read(uint8_t bits = 8) {
          uint8_t bitMask;
          uint8_t r = 0;
           wire_noInterrupts();
@@ -132,7 +130,7 @@ template < int m_pin > class Makita {
          return r;
        }
  
-       void CRIT_TIMING read(void * buf, size_t count) {
+       void read(void * buf, size_t count) {
          uint8_t * bp = (uint8_t * ) buf;
          do {
            uint8_t value = read();
@@ -142,7 +140,7 @@ template < int m_pin > class Makita {
  
 
 
-       void CRIT_TIMING write(uint8_t value, uint8_t bits = 8) {
+       void write(uint8_t value, uint8_t bits = 8) {
          do {
          wire_noInterrupts();
          DIRECT_MODE_INPUT(baseReg, bitmask); 
@@ -168,12 +166,12 @@ template < int m_pin > class Makita {
          wire_interrupts();
        }
 
-       void CRIT_TIMING write_u16(uint16_t value){
+       void write_u16(uint16_t value){
         write(value&0xff);
         write(value>>8);
        }
  
-       void CRIT_TIMING write(const void * buf, size_t count) {
+       void write(const void * buf, size_t count) {
          // Write bytes and calculate cyclic redundancy check-sum
          const uint8_t * bp = (const uint8_t * ) buf;
          do {
