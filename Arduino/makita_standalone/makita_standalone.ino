@@ -370,10 +370,10 @@ void getMsg() {
   DinMeter.Display.drawString("Status byte: " + String(error_byte), 5, 48);
   DinMeter.Display.drawString("DesignCap: " + String(design_capacity) + "MaH",
                               5, 63);
-  DinMeter.Display.drawString("Overdischarge: " + String(overload_percent) + "%", 5,
+  DinMeter.Display.drawString("Overload: " + String(overload_percent) + "%", 5,
                               78);
   DinMeter.Display.drawString(
-      "Overload: " + String(undervoltage_percent) + "%", 5, 93);
+      "Overdischarge: " + String(undervoltage_percent) + "%", 5, 93);
   DinMeter.Display.drawString("Health: " + String(health_percent) + "%", 5,
                               108);
 }
