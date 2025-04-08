@@ -16,30 +16,33 @@ OneWire<1> makita =OneWire<1>();
 void set_enablepin(bool high) {
   uint8_t val = high ? HIGH : LOW;
   digitalWrite(ENABLEPIN, val);
-  delay(600);
+
+  if(!high){
+    digitalWrite(MAKITAPIN, LOW);
+  }
+
+  delay(400);
 }
 
 void  cmd_and_read_33(byte *cmd, uint8_t cmd_len, byte *rsp,
                                  uint8_t rsp_len) {
-  delay(400);
   makita.reset();
   delayMicroseconds(310);
   makita.write(0x33);
   makita.read_bytes(rsp, 8);
   makita.write_bytes(cmd, cmd_len);
   makita.read_bytes(rsp + 8, rsp_len);
-  delay(400);
+  delay(100);
 }
 
 void  cmd_and_read_cc(byte *cmd, uint8_t cmd_len, byte *rsp,
                                  uint8_t rsp_len) {
-  delay(400);
   makita.reset();
   delayMicroseconds(310);
   makita.skip();
   makita.write_bytes(cmd, cmd_len);
   makita.read_bytes(rsp, rsp_len);
-  delay(400);
+  delay(100);
 }
 
 void  f0513_second_command_tree() {
@@ -206,8 +209,6 @@ void getModel() {
     set_enablepin(false);
     set_enablepin(true);
     f0513_model_cmd(data);
-    set_enablepin(false);
-    set_enablepin(true);
   }
 
   if (!got_model && !(data[0] == 0xFF && data[1] == 0xFF)) {
@@ -625,7 +626,6 @@ void loop() {
   if (newScr || btnPressed) {
     autoTurnoff = millis() + (TURNOFF_SECONDS * 1000);
     set_enablepin(true);
-    delay(100);
   }
 
   switch (screen) {
@@ -657,8 +657,13 @@ void loop() {
         DinMeter.Display.drawString("Reset lockout.", 5, 5);
       }
       if (btnPressed) {
-        testmode_cmd();
-        reset_error_cmd();
+        for(int i=0;i<3;i++){
+           delay(300);
+           testmode_cmd();
+           reset_error_cmd();
+           set_enablepin(true);
+            set_enablepin(false);
+        }
         showDone();
         nextNewScr = true;
       }
