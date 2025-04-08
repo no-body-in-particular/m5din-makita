@@ -102,20 +102,6 @@ void testmode_cmd() {
   cmd_and_read_33(cmd_params, 3, rsp, 29);
 }
 
-void leds_on_cmd() {
-  byte cmd_params[] = {0xDA, 0x31};
-  byte rsp[32];
-  memset(rsp, '\0', 32);
-  cmd_and_read_33(cmd_params, 2, rsp, 9);
-}
-
-void leds_off_cmd() {
-  byte cmd_params[] = {0xDA, 0x34};
-  byte rsp[32];
-  memset(rsp, '\0', 32);
-  cmd_and_read_33(cmd_params, 2, rsp, 9);
-}
-
 void reset_error_cmd() {
   byte cmd_params[] = {0xDA, 0x04};
   byte rsp[32];
@@ -624,7 +610,7 @@ void loop() {
     }
 
     screen = screen < 0 ? 0 : screen;
-    screen = screen > 5 ? 5 : screen;
+    screen = screen > 3 ? 3 : screen;
 
     newScr = true;
 
@@ -639,6 +625,7 @@ void loop() {
   if (newScr || btnPressed) {
     autoTurnoff = millis() + (TURNOFF_SECONDS * 1000);
     set_enablepin(true);
+    delay(100);
   }
 
   switch (screen) {
@@ -667,53 +654,10 @@ void loop() {
     case 3:
       if (newScr) {
         DinMeter.Display.clear();
-        DinMeter.Display.drawString("Light up all leds.", 5, 5);
-      }
-
-      if (btnPressed) {
-        if (is_f0513()) {
-          f0513_testmode_cmd();
-        } else {
-          testmode_cmd();
-        }
-        leds_on_cmd();
-
-        showDone();
-        nextNewScr = true;
-      }
-
-      break;
-
-    case 4:
-      if (newScr) {
-        DinMeter.Display.clear();
-        DinMeter.Display.drawString("Turn off up all leds.", 5, 5);
-      }
-      if (btnPressed) {
-        if (is_f0513()) {
-          f0513_testmode_cmd();
-        } else {
-          testmode_cmd();
-        }
-        leds_off_cmd();
-
-        showDone();
-        nextNewScr = true;
-      }
-      break;
-
-    case 5:
-      if (newScr) {
-        DinMeter.Display.clear();
         DinMeter.Display.drawString("Reset lockout.", 5, 5);
       }
       if (btnPressed) {
-        if (is_f0513()) {
-          f0513_testmode_cmd();
-        } else {
-          testmode_cmd();
-        }
-
+        testmode_cmd();
         reset_error_cmd();
         showDone();
         nextNewScr = true;
