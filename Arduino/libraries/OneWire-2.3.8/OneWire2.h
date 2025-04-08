@@ -54,7 +54,7 @@ uint8_t reset(void)
 {
 	uint8_t r;
 	uint8_t retries = 125;
-	wire_noInterrupts();
+	//wire_noInterrupts();
 	DIRECT_MODE_INPUT(baseReg, bitmask);
 	// wait until the wire is high... just in case
 	do {
@@ -69,7 +69,7 @@ uint8_t reset(void)
 	delayMicroseconds(70);
 	r = !DIRECT_READ(baseReg, bitmask);
 	delayMicroseconds(410);
-    	wire_interrupts();
+    	//wire_interrupts();
 	return r;
 }
 
@@ -79,7 +79,7 @@ uint8_t reset(void)
 //
 void  write_bit(uint8_t v)
 {
-	wire_noInterrupts();
+	//wire_noInterrupts();
 
 	DIRECT_WRITE_LOW(baseReg, bitmask);
 	DIRECT_MODE_OUTPUT(baseReg, bitmask);	// drive output low
@@ -93,7 +93,7 @@ void  write_bit(uint8_t v)
 		DIRECT_WRITE_HIGH(baseReg, bitmask);	// drive output high
 		delayMicroseconds(30);
 	}
-  	wire_interrupts();
+  	//wire_interrupts();
 }
 
 //
@@ -105,7 +105,7 @@ uint8_t read_bit(void)
 
 	uint8_t r;
 
-	wire_noInterrupts();
+	//wire_noInterrupts();
 	DIRECT_MODE_OUTPUT(baseReg, bitmask);
 	DIRECT_WRITE_LOW(baseReg, bitmask);
 	delayMicroseconds(10);
@@ -113,7 +113,7 @@ uint8_t read_bit(void)
 	delayMicroseconds(10);
 	r = DIRECT_READ(baseReg, bitmask);
 	delayMicroseconds(53);
-    wire_interrupts();
+        //wire_interrupts();
 	return r;
 }
 
@@ -125,25 +125,18 @@ uint8_t read_bit(void)
 // other mishap.
 //
 void write(uint8_t v) {
-	wire_noInterrupts();
-
     delayMicroseconds(90);
     for (uint8_t writeNMask = 0x01; writeNMask; writeNMask <<= 1) {
 	        OneWire::write_bit( (writeNMask & v)?1:0);
     }
-
-     wire_interrupts();
 }
 
 void write_bytes(const uint8_t *buf, uint16_t count) {
-    	wire_noInterrupts();
-
   for (uint16_t i = 0 ; i < count ; i++)
     write(buf[i]);
 
     DIRECT_MODE_INPUT(baseReg, bitmask);
     DIRECT_WRITE_LOW(baseReg, bitmask);  
-    wire_interrupts();
 }
 
 //
