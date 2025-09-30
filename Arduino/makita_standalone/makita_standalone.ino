@@ -610,7 +610,7 @@ void loop() {
       screen--;
     }
 
-    screen = screen < 0 ? 0 : screen;
+    screen = screen < 0 ? 3 : screen;
     screen = screen > 3 ? 3 : screen;
 
     newScr = true;
