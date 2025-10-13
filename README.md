@@ -1,8 +1,9 @@
 # m5din-makita
 Makita lockout flag reset tool based on https://github.com/mnh-jansson/open-battery-information .
-Pinout and how to connect things can be found in the pictures, a further explanation can be found in martin's repository.
-For 14.4v batteries please connect gnd to the nearest pin on the 8 pin header.
-For very old 18v batteries you may need 5v logic, since an ESP uses 3.3v logic you will need a level converter when talking to old batteries that are completely dead.
+
+How to wire it up:
+
+![screenshot](schematic.png)
 
 
 ==== NOTICE/TAKE CARE=====
