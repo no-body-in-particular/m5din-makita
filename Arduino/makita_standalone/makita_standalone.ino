@@ -3,8 +3,8 @@
 
 
 // pins used by this application, change as needed
-#define MAKITAPIN 1
-#define ENABLEPIN 2
+#define MAKITAPIN 2
+#define ENABLEPIN 1
 
 
 #define SWAP_NIBBLES(x) ((x & 0x0F) << 4 | (x & 0xF0) >> 4)
